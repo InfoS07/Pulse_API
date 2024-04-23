@@ -1,0 +1,49 @@
+{
+  "name": "Pulse_API",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18.17.0"
+  },
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n \"Typescript,Node\" -p \"[{name}]\" -c \"blue,green\" \"tsc --watch\" \"nodemon dist/index.js\"",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "start:docker": "pnpm build && node --inspect=0.0.0.0 dist/index.js",
+    "watch": "watchy --no-init-spawn --debounce 1 -w src -- docker-compose restart api",
+    "lint": "pnpm eslint .",
+    "lint:fix": "pnpm eslint --fix .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/InfoS07/Pulse_API/"
+  },
+  "homepage": "https://github.com/InfoS07/Pulse_API#readme",
+  "bugs": {
+    "url": "https://github.com/InfoS07/Pulse_API/issues"
+  },
+  "private": true,
+  "devDependencies": {
+    "@eslint/js": "^9.1.1",
+    "@tsconfig/node18": "^18.2.4",
+    "@types/express": "^4.17.21",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^20.12.7",
+    "concurrently": "^8.2.2",
+    "eslint": "^9.1.0",
+    "nodemon": "^3.1.0",
+    "typescript-eslint": "^7.7.0",
+    "watchy": "^0.10.1"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "typescript": "^5.4.5"
+  }
+}

@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ts-node-docker-pulse
+    ports:
+      - '4000:4000'
+      - '9229:9229' # for debugging
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/.pnpm-store
+      - /usr/src/app/node_modules # separate nod_modules of the container from our map
+    command: pnpm start:docker #replace CMD of Dockerfile
+    environment: #variables
+      NODE_ENV: developement # Configuration de l'environnement Node.js
+      PORT: 4000
