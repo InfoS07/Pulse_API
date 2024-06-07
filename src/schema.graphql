@@ -1,0 +1,295 @@
+"""
+An exercice
+[Exercice](https://fr.wikipedia.org/wiki/Star_Wars) universe.
+"""
+type Query {
+  exercise(id: ID!): Exercise
+  exercises: [Exercise]
+  exerciseMedia(id: ID!): ExerciseMedia
+  exerciseMedias: [ExerciseMedia]
+  category(id: ID!): Category
+  categories: [Category]
+  categoryExercise(category_id: ID!, exercise_id: ID!): CategoryExercise
+  categoryExercises: [CategoryExercise]
+  activity(id: ID!): Activity
+  activities: [Activity]
+  training(id: ID!): Training
+  trainings: [Training]
+  sessionReactionUser(session_id: ID!, user_id: ID!): SessionReactionUser
+  sessionReactionsUsers: [SessionReactionUser]
+  user(id: ID!): User
+  users: [User]
+  pod(id: ID!): Pod
+  pods: [Pod]
+  comment(id: ID!): Comment
+  comments: [Comment]
+  commentReport(id: ID!): CommentReport
+  commentReports: [CommentReport]
+  reportReason(id: ID!): ReportReason
+  reportReasons: [ReportReason]
+  reward(id: ID!): Reward
+  rewards: [Reward]
+  strike(id: ID!): Strike
+  strikes: [Strike]
+  userCalendar(id: ID!): UserCalendar
+  userCalendars: [UserCalendar]
+  userGoal(id: ID!): UserGoal
+  userGoals: [UserGoal]
+  badge(id: ID!): Badge
+  badges: [Badge]
+  userBadge(id: ID!): UserBadge
+  userBadges: [UserBadge]
+  notification(id: ID!): Notification
+  notifications: [Notification]
+  exercisesDifficulty(id: ID!): ExercisesDifficulty
+  exercisesDifficulties: [ExercisesDifficulty]
+  activitiesStatus(id: ID!): ActivitiesStatus
+  activitiesStatuses: [ActivitiesStatus]
+  activitiesFeeling(id: ID!): ActivitiesFeeling
+  activitiesFeelings: [ActivitiesFeeling]
+  trainingStatus(id: ID!): TrainingStatus
+  trainingStatuses: [TrainingStatus]
+  podsState(id: ID!): PodsState
+  podsStates: [PodsState]
+  goal(id: ID!): Goal
+  goals: [Goal]
+}
+
+type Mutation {
+  createTraining(input: CreateTrainingInput!): CreateTrainingPayload
+}
+
+input CreateTrainingInput {
+  title: String!
+  descriptiopn: String!
+}
+
+type CreateTrainingPayload {
+  training: Training
+  success: Boolean!
+  errorCode: CreateTrainingErrorCode
+}
+
+"""
+Available errors for an `createTraining` mutation.
+"""
+enum CreateTrainingErrorCode = UNKNOWN_ID | ACCESS_DENIED
+
+type Exercise {
+  id: ID
+  title: String
+  description: String
+  sequence: [Int]
+  repetitions: Int
+  pod_count: Int
+  player_count: Int
+  duration: Int
+  calories_burned: Int
+  author: String
+  score: Float
+  difficulty: ExercisesDifficulty
+  created_at: String
+}
+
+type ExerciseMedia {
+  id: ID
+  exercise_id: Int
+  url_photo: String
+  type: String
+  created_at: String
+}
+
+type Category {
+  id: ID
+  category: String
+}
+
+type CategoryExercise {
+  category_id: Int
+  exercise_id: Int
+}
+
+type Activity {
+  id: ID
+  exercise_id: Int
+  author: String
+  laps: Int
+  pause_between_laps: Int
+  calories_burned: Int
+  status: ActivitiesStatus
+  feeling: ActivitiesFeeling
+  steps: Int
+  start_at: String
+  end_at: String
+  created_at: String
+  avg_bpm: Int
+  max_bpm: Int
+  avg_speed: Float
+  max_speed: Float
+  participants: [Int]
+  player_count: Int
+}
+
+type Training {
+  id: ID
+  title: String
+  description: String
+  activities_list: [Int]
+  author: User
+  status: TrainingStatus
+  planned_at: String
+  start_at: String
+  end_at: String
+  created_at: String
+  comments: [Comment]
+}
+
+type SessionReactionUser {
+  session_id: Int
+  user_id: Int
+  created_at: String
+}
+
+type User {
+  id: ID
+  last_name: String
+  first_name: String
+  profile_photo: String
+  strike_count: Int
+  created_at: String
+  username: String
+  email: String
+  fitness_goal: String
+  postal_address: String
+  birth_date: String
+  height_cm: Int
+  weight_kg: Int
+  target_weight: Int
+  waist_size: Int
+  arm_size: Int
+}
+
+type Pod {
+  id: ID
+  set_pods_id: Int
+  owner_user_id: Int
+  current_state: PodsState
+  created_at: String
+}
+
+type Comment {
+  id: ID
+  session_id: Int
+  user_id: Int
+  user: User
+  text: String
+}
+
+type CommentReport {
+  id: ID
+  comment_id: Int
+  user_id: Int
+  user: User
+  reason_id: ReportReason
+  created_at: String
+}
+
+type ReportReason {
+  id: ID
+  label: String
+}
+
+type Reward {
+  id: ID
+  user_id: Int
+  reward_type: String
+  reward_value: Int
+  description: String
+  created_at: String
+  used_at: String
+}
+
+type Strike {
+  id: ID
+  user_id: Int
+  start_date: String
+  end_date: String
+  current_strike: Int
+  max_strike: Int
+  created_at: String
+}
+
+type UserCalendar {
+  id: ID
+  user_id: Int
+  date: String
+  activity_completed: Boolean
+  created_at: String
+}
+
+type Goal {
+  id: ID
+  goal_type: String
+}
+
+type UserGoal {
+  id: ID
+  user_id: Int
+  goal_type: Goal
+  goal_value: Float
+  current_progress: Float
+  start_date: String
+  end_date: String
+  achieved: Boolean
+  created_at: String
+}
+
+type Badge {
+  id: ID
+  name: String
+  description: String
+  icon_url: String
+  created_at: String
+}
+
+type UserBadge {
+  id: ID
+  user_id: Int
+  badge_id: Badge
+  awarded_at: String
+}
+
+type Notification {
+  id: ID
+  user_id: Int
+  notification_type: String
+  message: String
+  read: Boolean
+  sent_at: String
+  created_at: String
+}
+
+type ExercisesDifficulty {
+  id: ID
+  label: String
+}
+
+type ActivitiesStatus {
+  id: ID
+  label: String
+}
+
+type ActivitiesFeeling {
+  id: ID
+  label: String
+}
+
+type TrainingStatus {
+  id: ID
+  label: String
+}
+
+type PodsState {
+  id: ID
+  label: String
+}
