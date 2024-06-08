@@ -6,12 +6,12 @@ import {
 } from 'graphql';
 import { mutationWithClientMutationId } from 'graphql-relay';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { TrainingType } from '../types/Training';
-import CreateTrainingErrorCodeEnum from '../enums/CreateTrainingErrorCodeEnum';
+import { TrainingType } from '../../types/Training';
+import CreateTrainingErrorCodeEnum from '../../enums/CreateTrainingErrorCodeEnum';
 
 const createTrainingMutation: GraphQLFieldConfig<
   any,
-  { database: SupabaseClient }
+  { database: SupabaseClient; viewer: any }
 > = mutationWithClientMutationId({
   name: 'CreateTraining',
   description: 'Create a Training.',
@@ -24,13 +24,14 @@ const createTrainingMutation: GraphQLFieldConfig<
     success: { type: GraphQLBoolean },
     errorCode: { type: CreateTrainingErrorCodeEnum },
   },
-  mutateAndGetPayload: async (input, { database }) => {
+  mutateAndGetPayload: async (input, { database, viewer }) => {
     const { title, description } = input;
 
     const { data, error } = await database
       .from('training')
-      .insert([{ title, description }])
-      .select();
+      .insert([{ title, description, author_id: viewer.id }])
+      .select()
+      .single();
     if (error) {
       console.error('Error creating training:', error);
       return {
@@ -40,9 +41,9 @@ const createTrainingMutation: GraphQLFieldConfig<
       }; // Remplacer 'UNKNOWN_ID' par le code d'erreur approprié
     }
 
-    if (data.length > 0) {
+    if (data) {
       return {
-        training: data[0],
+        training: data,
         success: true,
         errorCode: null,
       };

@@ -68,11 +68,27 @@ export default new GraphQLObjectType({
         return podResolver.Query.pods();
       },
     },
+    myPods: {
+      type: new GraphQLList(PodType),
+      resolve: async (_, __, { viewer }) => {
+        return podResolver.Query.myPods({
+          owner_user_id: viewer.id,
+        });
+      },
+    },
     filteredTrainingByIdUser: {
       type: new GraphQLList(TrainingType),
       args: { idUser: { type: new GraphQLNonNull(GraphQLID) } },
       resolve: async (_, { idUser }) => {
         return trainingResolver.Query.traingingByIdUSer({ idUser: idUser });
+      },
+    },
+    mytraining: {
+      type: new GraphQLList(TrainingType),
+      resolve: async (_, __, { viewer }) => {
+        return trainingResolver.Query.mytraining({
+          author_id: viewer.id,
+        });
       },
     },
     // TODO

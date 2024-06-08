@@ -48,26 +48,27 @@ const verifyToken = async (req: any, res: any, next: any) => {
       return res.status(401).json({ error: 'Invalid token' });
     }
 
-    req.user = user;
+    req.user = user.user;
     next();
   } catch (err) {
     return res.status(401).json({ error: 'Invalid token' });
   }
 };
 
+app.use(verifyToken);
+
 app.use(
   '/graphql',
-  verifyToken,
-  graphqlHTTP({
+  graphqlHTTP((req: any) => ({
     schema: schema,
-    context: { database, viewer: null },
+    context: { database, viewer: req.user },
     graphiql: {
       defaultQuery,
     },
-  })
+  }))
 );
 
-app.get('/populate', async (req, res) => {
+/* app.get('/populate', async (req, res) => {
   try {
     await populateDatabase();
     res.status(200).send('Base de données peuplée avec succès !');
@@ -75,7 +76,7 @@ app.get('/populate', async (req, res) => {
     console.error('Erreur lors du peuplement de la base de données :', error);
     res.status(500).send('Erreur lors du peuplement de la base de données');
   }
-});
+}); */
 
 /**
  * Port definition

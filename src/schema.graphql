@@ -57,6 +57,7 @@ type Query {
 
 type Mutation {
   createTraining(input: CreateTrainingInput!): CreateTrainingPayload
+  deleteTraining(input: DeleteTrainingInput!): DeleteTrainingPayload
 }
 
 input CreateTrainingInput {
@@ -70,10 +71,28 @@ type CreateTrainingPayload {
   errorCode: CreateTrainingErrorCode
 }
 
+# Input pour la mutation de suppression d'un entraînement
+input DeleteTrainingInput {
+  trainingId: ID!
+}
+
+# Payload pour la mutation de suppression d'un entraînement
+type DeleteTrainingPayload {
+  success: Boolean!
+  errorCode: DeleteTrainingErrorCode
+}
+
 """
 Available errors for an `createTraining` mutation.
 """
 enum CreateTrainingErrorCode = UNKNOWN_ID | ACCESS_DENIED
+
+enum DeleteTrainingErrorCode {
+  UNKNOWN_ERROR
+  TRAINING_NOT_FOUND
+  UNAUTHENTICATED
+}
+
 
 type Exercise {
   id: ID
