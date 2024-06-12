@@ -1,4 +1,3 @@
-// server.ts
 import express from 'express';
 import morgan from 'morgan';
 import { graphqlHTTP } from 'express-graphql';
