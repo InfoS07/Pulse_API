@@ -1,15 +1,15 @@
 import database from '../database';
 
-const databaseName = 'session_reactions_users';
+const databaseName = 'training_like_users';
 
-const reactionResolver = {
+const likesResolver = {
   Query: {
-    reactionByIdTraining: async ({ sessionId }: any) => {
+    likesByIdTraining: async (trainingId: Number) => {
       try {
         const { data, error } = await database
           .from(databaseName)
           .select('*')
-          .eq('session_id', sessionId);
+          .eq('training_id', trainingId);
         if (error) {
           throw new Error("Impossible de récupérer les j'aimes");
         }
@@ -21,4 +21,4 @@ const reactionResolver = {
   },
 };
 
-export default reactionResolver;
+export default likesResolver;

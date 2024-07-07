@@ -21,44 +21,11 @@ import { CategoryType } from './Category';
 import categoryResolver from '../../resolvers/categoryResolver';
 import { PodType } from './Pod';
 import podResolver from '../../resolvers/podResolver';
-import { CategoryWithExercisesType } from './CategoryWithExercises';
+import { profile } from 'console';
 
-export default new GraphQLObjectType({
-  name: 'Query',
+const QueryMobile = new GraphQLObjectType({
+  name: 'QueryMobile',
   fields: {
-    exercises: {
-      type: new GraphQLList(ExerciseType),
-      args: {
-        query: {
-          type: GraphQLString,
-          description: 'The title of the exercice',
-        },
-      },
-      resolve: async (_, { query }) => {
-        const data = await exerciseResolver.Query.exercises(query);
-
-        return data;
-      },
-    },
-    /* exercicesGroupByCategories: {
-      type: new GraphQLList(CategoryWithExercisesType),
-      args: {
-        query: {
-          type: GraphQLString,
-          description: 'The title of the exercice',
-        },
-        category: {
-          type: GraphQLString,
-          description: 'The category of the exercice',
-        },
-      },
-      resolve: async (_, { query, category }) => {
-        return await exerciseResolver.Query.exercisesGroupByCategories(
-          query,
-          category
-        );
-      },
-    }, */
     exercise: {
       type: ExerciseType,
       args: { id: { type: new GraphQLNonNull(GraphQLID) } },
@@ -66,32 +33,16 @@ export default new GraphQLObjectType({
         return exerciseResolver.Query.exercise({ id: id });
       },
     },
-    /* exercisesRecommend: {
+    exercises: {
+      type: new GraphQLList(ExerciseType),
+      resolve: async () => {
+        return exerciseResolver.Query.exercises();
+      },
+    },
+    exercisesRecommend: {
       type: new GraphQLList(ExerciseType),
       resolve: async (_, __, { viewer }) => {
         return exerciseResolver.Query.exercises();
-      },
-    }, */
-    users: {
-      type: new GraphQLList(UserType),
-      args: {
-        query: {
-          type: GraphQLString,
-          description:
-            'a term to search for in the user name, first name, or last name',
-        },
-      },
-      resolve: async (_, { query }, { viewer }) => {
-        return userResolver.Query.users({
-          user_id: viewer.id,
-          searchTerm: query,
-        });
-      },
-    },
-    reports: {
-      type: new GraphQLList(CommentReportType),
-      resolve: async () => {
-        return reportsResolver.Query.reports();
       },
     },
     categories: {
@@ -100,12 +51,6 @@ export default new GraphQLObjectType({
         return categoryResolver.Query.categories();
       },
     },
-    /* pods: {
-      type: new GraphQLList(PodType),
-      resolve: async () => {
-        return podResolver.Query.pods();
-      },
-    }, */
     myPods: {
       type: new GraphQLList(PodType),
       resolve: async (_, __, { viewer }) => {
@@ -114,23 +59,13 @@ export default new GraphQLObjectType({
         });
       },
     },
-    trainings: {
+    // TODO
+    allTrainings: {
       type: new GraphQLList(TrainingType),
-      args: {
-        user_id: {
-          type: GraphQLString,
-          description: 'The id of the user',
-        },
-      },
-      resolve: async (_, { user_id }, { viewer }) => {
-        return trainingResolver.Query.trainings(user_id, viewer.id);
-      },
-    },
-    filteredTrainingByIdUser: {
-      type: new GraphQLList(TrainingType),
-      args: { idUser: { type: new GraphQLNonNull(GraphQLID) } },
-      resolve: async (_, { idUser }) => {
-        return trainingResolver.Query.traingingByIdUSer({ idUser: idUser });
+      resolve: async (_, __, { viewer }) => {
+        return trainingResolver.Query.myTraining({
+          user_id: viewer.id,
+        });
       },
     },
     myTraining: {
@@ -163,7 +98,7 @@ export default new GraphQLObjectType({
       },
     },
     // TODO
-    /* deleteTraining: {
+    saveTraining: {
       type: new GraphQLList(TrainingType),
       args: {
         idTraining: { type: new GraphQLNonNull(GraphQLID) },
@@ -173,20 +108,14 @@ export default new GraphQLObjectType({
         // TODO
         return [];
       },
-    }, */
-    // TODO
-    strikeByIdUser: {
-      type: new GraphQLList(TrainingType),
-      args: { idUser: { type: new GraphQLNonNull(GraphQLID) } },
-      resolve: async (obj, args) => {
-        // TODO
-        return [];
-      },
     },
     // TODO
-    planningByIdUser: {
+    deleteTraining: {
       type: new GraphQLList(TrainingType),
-      args: { idUser: { type: new GraphQLNonNull(GraphQLID) } },
+      args: {
+        idTraining: { type: new GraphQLNonNull(GraphQLID) },
+        idUser: { type: new GraphQLNonNull(GraphQLID) },
+      },
       resolve: async (obj, args) => {
         // TODO
         return [];
@@ -201,5 +130,46 @@ export default new GraphQLObjectType({
         return [];
       },
     },
+    profile: {
+      type: UserType,
+      args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+      resolve: async (_, __, { viewer }) => {
+        return userResolver.Query.user({
+          id: viewer.id,
+        });
+      },
+    },
+    // TODO
+    followers: {
+      type: new GraphQLList(UserType),
+      args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+      resolve: async (_, { id }) => {
+        return; //userResolver.Query.followers({ id });
+      },
+    },
+    // TODO
+    following: {
+      type: new GraphQLList(UserType),
+      args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+      resolve: async (_, { id }) => {
+        return; //userResolver.Query.following({ id });
+      },
+    },
+    // TODO
+    myFollowers: {
+      type: new GraphQLList(UserType),
+      resolve: async (_, __, { viewer }) => {
+        return; //userResolver.Query.followers({ id: viewer.id });
+      },
+    },
+    // TODO
+    myFollowing: {
+      type: new GraphQLList(UserType),
+      resolve: async (_, __, { viewer }) => {
+        return; //userResolver.Query.following({ id: viewer.id });
+      },
+    },
   },
 });
+
+export default QueryMobile;

@@ -6,8 +6,10 @@ import {
   GraphQLFloat,
   GraphQLList,
 } from 'graphql';
-import { ExerciseMediaType } from './ExerciseMedia';
 import exerciseResolver from '../../resolvers/exerciseResolver';
+import categoryResolver from '../../resolvers/categoryResolver';
+import { UserType } from './User';
+import userResolver from '../../resolvers/userResolver';
 
 export const ExerciseType = new GraphQLObjectType({
   name: 'Exercise',
@@ -33,14 +35,8 @@ export const ExerciseType = new GraphQLObjectType({
     player_count: {
       type: GraphQLInt,
     },
-    duration: {
-      type: GraphQLInt,
-    },
     calories_burned: {
       type: GraphQLInt,
-    },
-    author: {
-      type: GraphQLString,
     },
     score: {
       type: GraphQLFloat,
@@ -51,12 +47,16 @@ export const ExerciseType = new GraphQLObjectType({
     created_at: {
       type: GraphQLString,
     },
-    media: {
-      type: new GraphQLList(ExerciseMediaType),
+    photos: {
+      type: new GraphQLList(GraphQLString),
       resolve: async (obj) => {
-        return await exerciseResolver.Query.mediaByIdExercice({
-          exercise_id: obj.id,
-        });
+        return await exerciseResolver.Query.imageByExercice(obj.photos);
+      },
+    },
+    categories: {
+      type: new GraphQLList(GraphQLString),
+      resolve: async (obj) => {
+        return await categoryResolver.Query.categoriesById(obj.categories);
       },
     },
   },

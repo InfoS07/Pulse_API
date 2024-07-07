@@ -5,8 +5,7 @@ An exercice
 type Query {
   exercise(id: ID!): Exercise
   exercises: [Exercise]
-  exerciseMedia(id: ID!): ExerciseMedia
-  exerciseMedias: [ExerciseMedia]
+  exercisesRecommend: [Exercise]
   category(id: ID!): Category
   categories: [Category]
   categoryExercise(category_id: ID!, exercise_id: ID!): CategoryExercise
@@ -15,8 +14,8 @@ type Query {
   activities: [Activity]
   training(id: ID!): Training
   trainings: [Training]
-  sessionReactionUser(session_id: ID!, user_id: ID!): SessionReactionUser
-  sessionReactionsUsers: [SessionReactionUser]
+  Like(session_id: ID!, user_id: ID!): Like
+  sessionReactionsUsers: [Like]
   user(id: ID!): User
   users: [User]
   pod(id: ID!): Pod
@@ -102,25 +101,23 @@ type Exercise {
   repetitions: Int
   pod_count: Int
   player_count: Int
-  duration: Int
   calories_burned: Int
   author: String
   score: Float
   difficulty: ExercisesDifficulty
   created_at: String
-}
-
-type ExerciseMedia {
-  id: ID
-  exercise_id: Int
-  url_photo: String
-  type: String
-  created_at: String
+  photos: [String]
 }
 
 type Category {
   id: ID
   category: String
+}
+
+type CategoryWithExercisesType {
+  id: ID
+  category: String
+  exercises: [Exercise]
 }
 
 type CategoryExercise {
@@ -163,7 +160,7 @@ type Training {
   comments: [Comment]
 }
 
-type SessionReactionUser {
+type Like {
   session_id: Int
   user_id: Int
   created_at: String

@@ -1,6 +1,6 @@
 import database from '../database';
 
-const databaseName = 'comments';
+const databaseName = 'training_comments';
 
 const commentResolver = {
   Query: {
@@ -9,7 +9,7 @@ const commentResolver = {
         const { data, error } = await database
           .from(databaseName)
           .select('*')
-          .eq('session_id', sessionId);
+          .eq('training_id', sessionId);
         if (error) {
           throw new Error('Impossible de récupérer les commentaires');
         }

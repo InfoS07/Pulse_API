@@ -11,6 +11,9 @@ export const UserType = new GraphQLObjectType({
     id: {
       type: GraphQLID,
     },
+    uid: {
+      type: GraphQLString,
+    },
     last_name: {
       type: GraphQLString,
     },
@@ -20,41 +23,14 @@ export const UserType = new GraphQLObjectType({
     profile_photo: {
       type: GraphQLString,
     },
-    strike_count: {
-      type: GraphQLInt,
-    },
-    created_at: {
-      type: GraphQLString,
-    },
     username: {
       type: GraphQLString,
     },
     email: {
       type: GraphQLString,
     },
-    fitness_goal: {
-      type: GraphQLString,
-    },
-    postal_address: {
-      type: GraphQLString,
-    },
     birth_date: {
       type: GraphQLString,
-    },
-    height_cm: {
-      type: GraphQLInt,
-    },
-    weight_kg: {
-      type: GraphQLInt,
-    },
-    target_weight: {
-      type: GraphQLInt,
-    },
-    waist_size: {
-      type: GraphQLInt,
-    },
-    arm_size: {
-      type: GraphQLInt,
     },
   },
 });

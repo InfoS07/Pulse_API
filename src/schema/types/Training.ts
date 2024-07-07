@@ -7,8 +7,12 @@ import {
 } from 'graphql';
 import { CommentType } from './Comment';
 import commentResolver from '../../resolvers/commentResolver';
-import reactionResolver from '../../resolvers/reactionResolver';
-import { SessionReactionUserType } from './SessionReactionUser';
+import likesResolver from '../../resolvers/likesResolver';
+import { LikeType } from './Like';
+import { UserType } from './User';
+import userResolver from '../../resolvers/userResolver';
+import { ExerciseType } from './Exercise';
+import exerciseResolver from '../../resolvers/exerciseResolver';
 
 export const TrainingType = new GraphQLObjectType({
   name: 'Training',
@@ -26,12 +30,14 @@ export const TrainingType = new GraphQLObjectType({
       type: new GraphQLList(GraphQLInt),
     },
     author: {
-      type: GraphQLInt,
+      type: UserType,
+      resolve: async (obj) => {
+        return await userResolver.Query.user({
+          idUser: obj.author_id,
+        });
+      },
     },
     status: {
-      type: GraphQLString,
-    },
-    planned_at: {
       type: GraphQLString,
     },
     start_at: {
@@ -43,6 +49,14 @@ export const TrainingType = new GraphQLObjectType({
     created_at: {
       type: GraphQLString,
     },
+    exercise: {
+      type: ExerciseType,
+      resolve: async (obj) => {
+        return await exerciseResolver.Query.exercise({
+          id: obj.exercise_id,
+        });
+      },
+    },
     comments: {
       type: new GraphQLList(CommentType),
       resolve: async (obj) => {
@@ -52,11 +66,9 @@ export const TrainingType = new GraphQLObjectType({
       },
     },
     likes: {
-      type: new GraphQLList(SessionReactionUserType),
+      type: new GraphQLList(LikeType),
       resolve: async (obj) => {
-        return await reactionResolver.Query.reactionByIdTraining({
-          sessionId: obj.id,
-        });
+        return await likesResolver.Query.likesByIdTraining(obj.id);
       },
     },
   },

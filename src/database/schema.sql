@@ -31,7 +31,6 @@ create table Exercises (
   repetitions integer,
   pod_count integer,
   player_count integer,
-  duration integer,
   calories_burned integer,
   author varchar,
   score float,

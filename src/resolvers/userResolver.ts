@@ -1,5 +1,6 @@
 import internal from 'stream';
 import database from '../database';
+import { print } from 'graphql';
 
 const databaseName = 'users';
 
@@ -10,7 +11,7 @@ const userResolver = {
         const { data, error } = await database
           .from(databaseName)
           .select('*')
-          .eq('id', idUser)
+          .eq('uid', idUser)
           .single();
         if (error) {
           throw new Error("Impossible de récupérer l'utilisateur");
@@ -20,9 +21,23 @@ const userResolver = {
         throw new Error("Erreur lors de la récupération de l'utilisateur");
       }
     },
-    users: async () => {
+    users: async ({ user_id, searchTerm }: any) => {
       try {
-        const { data, error } = await database.from(databaseName).select('*');
+        let queryBuilder = database
+          .from(databaseName)
+          .select('*')
+          .neq('uid', user_id);
+
+        if (searchTerm) {
+          queryBuilder = queryBuilder.or(
+            `username.ilike.%${searchTerm}%,first_name.ilike.%${searchTerm}%,last_name.ilike.%${searchTerm}%`
+          );
+        }
+
+        const { data, error } = await queryBuilder;
+
+        console.log('error', error);
+
         if (error) {
           throw new Error('Impossible de récupérer les utilisateurs');
         }
