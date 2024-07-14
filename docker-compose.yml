@@ -1,6 +1,14 @@
 version: '3.8'
 
 services:
+  #postgres:
+  #image: postgres:15-alpine
+  #ports:
+  # - 5432:5432
+  #environment:
+  # - POSTGRES_DB: pulse_dev
+  # - POSTGRES_HOST_AUTH_METHOD: trust
+
   api:
     build:
       context: .
@@ -14,6 +22,9 @@ services:
       - /usr/src/app/.pnpm-store
       - /usr/src/app/node_modules # separate nod_modules of the container from our map
     command: pnpm start:docker #replace CMD of Dockerfile
+    #depends_on:
+    #  - postgres
     environment: #variables
       NODE_ENV: developement # Configuration de l'environnement Node.js
       PORT: 4000
+      DATABASE_URL: postgres://postgres@postgres/pulse_dev

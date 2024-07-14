@@ -1,5 +1,5 @@
 # Étape 1 : Construction
-FROM --platform=linux/arm64 node:18.17.0-alpine as builder
+FROM node:18.17.0-alpine as builder
 
 # Installation de pnpm
 RUN npm i -g pnpm
@@ -14,7 +14,7 @@ RUN pnpm install && pnpm store prune && rm -rf /root/.npm
 COPY . .
 
 # Étape 2 : Image finale
-FROM --platform=linux/arm64 node:18.17.0-alpine
+FROM node:18.17.0-alpine
 
 WORKDIR /usr/src/app
 
