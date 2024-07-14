@@ -116,14 +116,8 @@ export default new GraphQLObjectType({
     },
     trainings: {
       type: new GraphQLList(TrainingType),
-      args: {
-        user_id: {
-          type: GraphQLString,
-          description: 'The id of the user',
-        },
-      },
-      resolve: async (_, { user_id }, { viewer }) => {
-        return trainingResolver.Query.trainings(user_id, viewer.id);
+      resolve: async (_, __, { viewer }) => {
+        return trainingResolver.Query.trainings(viewer.id);
       },
     },
     filteredTrainingByIdUser: {

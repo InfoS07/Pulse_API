@@ -223,7 +223,9 @@ const exerciseResolver = {
       try {
         const photosUrl: [string?] = [];
         photos.forEach((photo) => {
-          const data = database.storage.from('training').getPublicUrl(photo);
+          const data = database.storage
+            .from('exercises_photos')
+            .getPublicUrl(photo);
           photosUrl.push(data.data.publicUrl);
         });
         return photosUrl;

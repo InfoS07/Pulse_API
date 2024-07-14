@@ -26,6 +26,9 @@ export const ExerciseType = new GraphQLObjectType({
     sequence: {
       type: new GraphQLList(GraphQLInt),
     },
+    type: {
+      type: GraphQLString,
+    },
     repetitions: {
       type: GraphQLInt,
     },

@@ -52,27 +52,25 @@ const trainingResolver = {
         );
       }
     },
-    trainings: async (user_id: string, viewer_id: string) => {
+    trainings: async (viewer_id: string) => {
       try {
         // Étape 1: Récupérer les user_id des utilisateurs auxquels vous êtes abonné
         const { data: followersData, error: followersError } = await database
           .from('user_followers')
-          .select('user_id')
-          .eq('follower_id', user_id);
+          .select('follower_id')
+          .eq('user_id', viewer_id);
 
         if (followersError) {
           throw new Error('Impossible de récupérer les abonnements');
         }
 
-        // Extraire les user_id des abonnés
         const followingUserIds = followersData.map(
-          (follower) => follower.user_id
+          (follower) => follower.follower_id
         );
-        console.log('followersData', followersData);
-        console.log('followingUserIds', followingUserIds);
+        followingUserIds.push(viewer_id);
 
         if (followingUserIds.length === 0) {
-          return []; // Si pas d'abonnés, retourner une liste vide
+          return [];
         }
 
         // Étape 2: Récupérer les entraînements des utilisateurs abonnés
@@ -100,7 +98,6 @@ const trainingResolver = {
         );
       }
     },
-
     traingingsByIdUser: async (user_id: Number) => {
       try {
         const { data, error } = await database
@@ -125,6 +122,18 @@ const trainingResolver = {
         return response;
       } catch (error) {
         throw new Error('Erreur lors de la récupération des entraînements');
+      }
+    },
+    imageByTraining: async (photos: [string]) => {
+      try {
+        const photosUrl: [string?] = [];
+        photos.forEach((photo) => {
+          const data = database.storage.from('training').getPublicUrl(photo);
+          photosUrl.push(data.data.publicUrl);
+        });
+        return photosUrl;
+      } catch (error) {
+        throw new Error('Erreur lors de la récupération des images');
       }
     },
   },

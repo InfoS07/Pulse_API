@@ -13,6 +13,8 @@ import { UserType } from './User';
 import userResolver from '../../resolvers/userResolver';
 import { ExerciseType } from './Exercise';
 import exerciseResolver from '../../resolvers/exerciseResolver';
+import trainingResolver from '../../resolvers/trainingResolver';
+import { TrainingStatsType } from './TrainingStats';
 
 export const TrainingType = new GraphQLObjectType({
   name: 'Training',
@@ -48,6 +50,19 @@ export const TrainingType = new GraphQLObjectType({
     },
     created_at: {
       type: GraphQLString,
+    },
+    repetitions: {
+      type: GraphQLInt,
+    },
+    stats: {
+      type: new GraphQLList(TrainingStatsType),
+    },
+    photos: {
+      type: new GraphQLList(GraphQLString),
+      resolve: async (obj) => {
+        if (!obj.photos) return [];
+        else return await trainingResolver.Query.imageByTraining(obj.photos);
+      },
     },
     exercise: {
       type: ExerciseType,

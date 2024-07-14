@@ -195,7 +195,8 @@ type Pod {
 
 type Comment {
   id: ID
-  session_id: Int
+  training_id: Int
+  created_at: String
   user_id: Int
   user: User
   text: String

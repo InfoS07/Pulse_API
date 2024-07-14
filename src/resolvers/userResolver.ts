@@ -46,6 +46,16 @@ const userResolver = {
         throw new Error('Erreur lors de la récupération des utilisateurs');
       }
     },
+    imageProfilByUser: async (photoName: string) => {
+      try {
+        let photosUrl: string = '';
+        const data = database.storage.from('profil').getPublicUrl(photoName);
+        photosUrl = data.data.publicUrl;
+        return photosUrl;
+      } catch (error) {
+        throw new Error('Erreur lors de la récupération des medias');
+      }
+    },
   },
 };
 

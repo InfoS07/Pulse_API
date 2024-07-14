@@ -7,6 +7,7 @@ import {
 } from 'graphql';
 import { UserType } from './User';
 import userResolver from '../../resolvers/userResolver';
+import { create } from 'domain';
 
 export const CommentType = new GraphQLObjectType({
   name: 'Comment',
@@ -14,11 +15,14 @@ export const CommentType = new GraphQLObjectType({
     id: {
       type: GraphQLID,
     },
-    session_id: {
+    training_id: {
       type: GraphQLInt,
     },
     user_id: {
       type: GraphQLInt,
+    },
+    created_at: {
+      type: GraphQLString,
     },
     user: {
       type: UserType,
@@ -28,7 +32,7 @@ export const CommentType = new GraphQLObjectType({
         });
       },
     },
-    text: {
+    content: {
       type: GraphQLString,
     },
   },

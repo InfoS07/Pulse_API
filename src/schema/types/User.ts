@@ -4,6 +4,7 @@ import {
   GraphQLString,
   GraphQLInt,
 } from 'graphql';
+import userResolver from '../../resolvers/userResolver';
 
 export const UserType = new GraphQLObjectType({
   name: 'User',
@@ -22,6 +23,9 @@ export const UserType = new GraphQLObjectType({
     },
     profile_photo: {
       type: GraphQLString,
+      resolve: async (obj) => {
+        return await userResolver.Query.imageProfilByUser(obj.profile_photo);
+      },
     },
     username: {
       type: GraphQLString,
@@ -31,6 +35,9 @@ export const UserType = new GraphQLObjectType({
     },
     birth_date: {
       type: GraphQLString,
+    },
+    points: {
+      type: GraphQLInt,
     },
   },
 });
