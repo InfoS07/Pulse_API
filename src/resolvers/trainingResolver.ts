@@ -20,6 +20,21 @@ const trainingResolver = {
         throw new Error('Erreur lors de la récupération des entraînements');
       }
     },
+    trainingById: async ({ id }: any) => {
+      try {
+        const { data, error } = await database
+          .from(databaseName)
+          .select('*')
+          .eq('id', id)
+          .single();
+        if (error) {
+          throw new Error("Impossible de récupérer l'entraînement");
+        }
+        return data;
+      } catch (error) {
+        throw new Error("Erreur lors de la récupération de l'entraînement");
+      }
+    },
     myTraining: async ({ author_id }: any) => {
       try {
         const { data, error } = await database

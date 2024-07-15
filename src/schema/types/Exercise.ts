@@ -5,6 +5,7 @@ import {
   GraphQLInt,
   GraphQLFloat,
   GraphQLList,
+  GraphQLBoolean,
 } from 'graphql';
 import exerciseResolver from '../../resolvers/exerciseResolver';
 import categoryResolver from '../../resolvers/categoryResolver';
@@ -62,5 +63,11 @@ export const ExerciseType = new GraphQLObjectType({
         return await categoryResolver.Query.categoriesById(obj.categories);
       },
     },
+    price_coin: {
+      type: GraphQLInt,
+    },
+    /* id_payed: {
+      type: GraphQLBoolean,
+    }, */
   },
 });

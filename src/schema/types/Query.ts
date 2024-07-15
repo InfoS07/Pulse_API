@@ -22,6 +22,8 @@ import categoryResolver from '../../resolvers/categoryResolver';
 import { PodType } from './Pod';
 import podResolver from '../../resolvers/podResolver';
 import { CategoryWithExercisesType } from './CategoryWithExercises';
+import { ChallengeUserType } from './ChallengeUser';
+import challengeUserResolver from '../../resolvers/challengeUserResolver';
 
 export default new GraphQLObjectType({
   name: 'Query',
@@ -86,6 +88,16 @@ export default new GraphQLObjectType({
           user_id: viewer.id,
           searchTerm: query,
         });
+      },
+    },
+    challengesUser: {
+      type: new GraphQLList(ChallengeUserType),
+      resolve: async (_, __, { viewer }) => {
+        return challengeUserResolver.Query.challengesUserWhereImInvatedOrImTheOwner(
+          {
+            idUser: viewer.id,
+          }
+        );
       },
     },
     reports: {
